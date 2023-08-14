@@ -17,7 +17,7 @@ private:
     int executeBash(std::string command);
 
 public:
-    std::string convert(const std::string& docData, FileFormat fromFormat, FileFormat toFormat, size_t* outSize);
+    std::string convert(const std::string& docData, FileFormat fromFormat, FileFormat toFormat);
 };
 
 #endif // __LIBREOFFICE_SERVICE_HPP__

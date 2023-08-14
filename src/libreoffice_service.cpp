@@ -12,14 +12,14 @@ int LibreOfficeService::executeBash(std::string command)
     return system(command.c_str());
 }
 
-std::string LibreOfficeService::convert(const std::string& docData, FileFormat fromFormat, FileFormat toFormat, size_t* outSize)
+std::string LibreOfficeService::convert(const std::string& docData, FileFormat fromFormat, FileFormat toFormat)
 {
     namespace fs = std::filesystem;
     static const char* tempFilename = "LibreOfficeServiceTempFile";
 
     std::string processDir = xg::newGuid().str();
     std::string tempDir = fmt::format("/home/{}/{}/{}", systemUsername, serviceDir, processDir);
-    if(!fs::create_directory(tempDir)) throw std::exception(fmt::format("Failed to create directory. Path: '{}'", tempDir).c_str());
+    if(!fs::create_directories(tempDir)) throw std::exception(fmt::format("Failed to create directory. Path: '{}'", tempDir).c_str());
 
     std::string fromTempFilepath = fmt::format("{}/{}.{}", tempDir, tempFilename, fromFormat.name);
     std::string toTempFilepath = fmt::format("{}/{}.{}", tempDir, tempFilename, toFormat.name);

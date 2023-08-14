@@ -1,9 +1,14 @@
 #include "crow/crow.h"
 #include "libreoffice_service.hpp"
+#include "logger.hpp"
+#include "fmt/format.h"
+#include "utility.hpp"
 
 // fordec
 void setRouting(crow::SimpleApp& app);
 //
+
+static Logger logger;
 
 int main(int argc, char* argv[])
 {
@@ -19,7 +24,7 @@ int main(int argc, char* argv[])
 
 void setRouting(crow::SimpleApp& app)
 {
-    CROW_ROUTE(app, "/api/convert/")
+    CROW_ROUTE(app, "/api/convert")
         .methods("POST"_method)
     ([](const crow::request& req){
         if(req.body.length() == 0u) return crow::response(400, "Body of the request must contain document data.");
@@ -28,12 +33,22 @@ void setRouting(crow::SimpleApp& app)
         char* toFormatStr = req.url_params.get("toFormat");
         if(fromFormatStr == nullptr || toFormatStr == nullptr) return crow::response(400, "Invalid url parameters.");
 
-        FileFormat fromFormat = FileFormat::parse(fromFormatStr);
-        FileFormat toFormat = FileFormat::parse(toFormatStr);
+        FileFormat fromFormat = FileFormat::parse(toLower(fromFormatStr));
+        FileFormat toFormat = FileFormat::parse(toLower(toFormatStr));
         if(fromFormat == FileFormat::NOT_DEFINED || toFormat == FileFormat::NOT_DEFINED) 
             return crow::response(400, "Invalid 'from' or 'to' format.");
         
         LibreOfficeService libreService;
-        libreService.convert(&req.body.front(), fromFormat, toFormat);
+        std::string convertedData;
+        try
+        {
+            convertedData = libreService.convert(req.body, fromFormat, toFormat);
+        }
+        catch(std::exception& ex)
+        {
+            logger.logError(fmt::format("Failed to convert document: {}", ex.what()));
+        }
+
+        return crow::response(toFormat.mimeType, convertedData);
     });
 }

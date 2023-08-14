@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <chrono>
+#include "fmt/format.h"
 
 class Logger
 {
@@ -15,15 +16,15 @@ private:
 public:
     inline void logInfo(std::string message)
     {
-        std::cout << "[INFO]<" << "" << getTimestamp() << message << std::endl;
+        std::cout << fmt::format("[INFO]<{}> {}", getTimestamp(), message);
     }
     inline void logWarning(std::string message)
     {
-        std::cout << "[WARNING]<" << "" << getTimestamp() << message << std::endl;
+        std::cout << fmt::format("[WARNING]<{}> {}", getTimestamp(), message);
     }
     inline void logError(std::string message)
     {
-        std::cout << "[ERROR]<" << "" << getTimestamp() << message << std::endl;
+        std::cout << fmt::format("[ERROR]<{}> {}", getTimestamp(), message);
     }
 };
 

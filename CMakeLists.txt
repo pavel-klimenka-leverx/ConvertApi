@@ -8,6 +8,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 ### Put the names of your source files here ###
 set(SRC_FILES 
     main.cpp
+    file_format.hpp file_format.cpp
+    libreoffice_service.hpp libreoffice_service.cpp
+    logger.hpp
 )
 
 list(TRANSFORM SRC_FILES PREPEND "src/")
