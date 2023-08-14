@@ -23,7 +23,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -d)
 target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/external/lib)
 
 ### Add include directories here ###
-target_include_directories(${PROJECT_NAME} PRIVATE external)
+target_include_directories(${PROJECT_NAME} PRIVATE external external/crow)
 
 ### Uncomment this line if you want the standard libraries to be linked statically ###
 # target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
