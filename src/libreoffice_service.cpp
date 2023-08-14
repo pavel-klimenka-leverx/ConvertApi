@@ -3,7 +3,7 @@
 #include <fstream>
 #include "crossguid/guid.hpp"
 #include "fmt/format.h"
-#include <exception>
+#include "prim_exception.hpp"
 #include <sstream>
 
 
@@ -19,13 +19,13 @@ std::string LibreOfficeService::convert(const std::string& docData, FileFormat f
 
     std::string processDir = xg::newGuid().str();
     std::string tempDir = fmt::format("/home/{}/{}/{}", systemUsername, serviceDir, processDir);
-    if(!fs::create_directories(tempDir)) throw std::exception(fmt::format("Failed to create directory. Path: '{}'", tempDir).c_str());
+    if(!fs::create_directories(tempDir)) throw PRIM_EXCEPTION(fmt::format("Failed to create directory. Path: '{}'", tempDir).c_str());
 
     std::string fromTempFilepath = fmt::format("{}/{}.{}", tempDir, tempFilename, fromFormat.name);
     std::string toTempFilepath = fmt::format("{}/{}.{}", tempDir, tempFilename, toFormat.name);
 
     std::ofstream file(fromTempFilepath);
-    if(!file.good()) throw std::exception(fmt::format("Failed to create temp file. Path: {}", fromTempFilepath).c_str());
+    if(!file.good()) throw PRIM_EXCEPTION(fmt::format("Failed to create temp file. Path: {}", fromTempFilepath).c_str());
 
     file << docData;
     file.close();
@@ -35,10 +35,10 @@ std::string LibreOfficeService::convert(const std::string& docData, FileFormat f
 
     int commandResult = executeBash(command);
 
-    if(commandResult != 0) throw std::exception(fmt::format("Failed to execute bash command (code: {}). Command: '{}'", commandResult, command).c_str());
+    if(commandResult != 0) throw PRIM_EXCEPTION(fmt::format("Failed to execute bash command (code: {}). Command: '{}'", commandResult, command).c_str());
 
     std::ifstream outFile(toTempFilepath);
-    if(!outFile.good()) throw std::exception(fmt::format("Failed to open out file. Path: {}", toTempFilepath).c_str());
+    if(!outFile.good()) throw PRIM_EXCEPTION(fmt::format("Failed to open out file. Path: {}", toTempFilepath).c_str());
 
     std::stringstream outFileStream;
     outFileStream << outFile.rdbuf();

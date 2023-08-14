@@ -3,6 +3,7 @@
 #include "logger.hpp"
 #include "fmt/format.h"
 #include "utility.hpp"
+#include "prim_exception.hpp"
 
 // fordec
 void setRouting(crow::SimpleApp& app);
@@ -43,6 +44,10 @@ void setRouting(crow::SimpleApp& app)
         try
         {
             convertedData = libreService.convert(req.body, fromFormat, toFormat);
+        }
+        catch(prim::Exception ex)
+        {
+            logger.logError(fmt::format("Failed to convert document: {}", ex.what()));
         }
         catch(std::exception& ex)
         {
