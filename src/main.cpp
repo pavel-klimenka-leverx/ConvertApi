@@ -47,13 +47,13 @@ void setRouting(crow::SimpleApp& app)
         }
         catch(prim::Exception ex)
         {
-            logger.logError(fmt::format("Failed to convert document: {}", ex.what()));
-        }
-        catch(std::exception& ex)
-        {
-            logger.logError(fmt::format("Failed to convert document: {}", ex.what()));
+            std::string message = fmt::format("Failed to convert document: {}", ex.what());
+            logger.logError(message);
+            return crow::response(crow::status::INTERNAL_SERVER_ERROR, message);
         }
 
-        return crow::response(toFormat.mimeType, convertedData);
+        crow::response response(crow::status::OK, convertedData);
+        response.set_header("Content-type", toFormat.mimeType);
+        return response;
     });
 }
