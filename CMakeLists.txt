@@ -20,11 +20,11 @@ add_executable(${PROJECT_NAME} ${SRC_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX -d)
 
 ### Add link directories here ###
-IF (WIN32)
+if (WIN32)
     target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/external/lib/windows)
-ELSE()
+else()
     target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/external/lib/linux)
-ENDIF()
+endif()
 
 ### Add include directories here ###
 target_include_directories(${PROJECT_NAME} PRIVATE external external/crow)
@@ -36,3 +36,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE external external/crow)
 set(CROSSGUID_LIB debug crossguid-dgb optimized crossguid)
 set(FMT_LIB debug fmtd optimized fmt)
 target_link_libraries(${PROJECT_NAME} ${CROSSGUID_LIB} ${FMT_LIB})
+
+if (UNIX)
+    target_link_libraries(${PROJECT_NAME} uuid)
+endif()
