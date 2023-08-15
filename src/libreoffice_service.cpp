@@ -30,8 +30,8 @@ std::string LibreOfficeService::convert(const std::string& docData, FileFormat f
     file << docData;
     file.close();
 
-    std::string command = fmt::format("{} -env:SingleAppInstance=false -env:UserInstallation=file//{} --headless --convert-to {} --outdir {} {}",
-        libreBin, tempDir, toFormat.name, tempDir, fromFormat.name);
+    std::string command = fmt::format("{} -env:SingleAppInstance=false -env:UserInstallation=file://{} --headless --convert-to {} --outdir {} {}",
+        libreBin, tempDir, toFormat.name, tempDir, fromTempFilepath);
 
     int commandResult = executeBash(command);
 
