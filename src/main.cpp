@@ -70,5 +70,7 @@ void setCors(App& app)
     auto& cors = app.get_middleware<crow::CORSHandler>();
     cors.global()
         .allow_credentials()
+        .methods("POST"_method, "GET"_method)
+        .headers("authorization", "content-type")
         .origin(origin);
 }
