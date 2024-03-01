@@ -65,10 +65,10 @@ void setRouting(App& app)
 
 void setCors(App& app)
 {
-    const static char* origins = "https://convert.peer-manager.com, https://localhost:3000";
+    const static char origin = "https://convert.peer-manager.com";
 
     auto& cors = app.get_middleware<crow::CORSHandler>();
     cors.global()
         .allow_credentials()
-        .origin(origins);
+        .origin(origin);
 }
