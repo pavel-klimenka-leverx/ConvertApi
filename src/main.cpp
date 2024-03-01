@@ -4,17 +4,22 @@
 #include "fmt/format.h"
 #include "utility.hpp"
 #include "prim_exception.hpp"
+#include "crow/middlewares/cors.h"
+
+using App = crow::App<crow::CORSHandler>;
 
 // fordec
-void setRouting(crow::SimpleApp& app);
+void setRouting(App& app);
+void setCors(App& app);
 //
 
 static Logger logger;
 
 int main(int argc, char* argv[])
 {
-    crow::SimpleApp crowApp;
+    App crowApp;
 
+    setCors(crowApp);
     setRouting(crowApp);
 
     crowApp.loglevel(crow::LogLevel::Debug);
@@ -23,7 +28,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void setRouting(crow::SimpleApp& app)
+void setRouting(App& app)
 {
     CROW_ROUTE(app, "/api/convert")
         .methods("POST"_method)
@@ -56,4 +61,14 @@ void setRouting(crow::SimpleApp& app)
         response.set_header("Content-type", toFormat.mimeType);
         return response;
     });
+}
+
+void setCors(App& app)
+{
+    const static char* origins = "https://convert.peer-manager.com, https://localhost:3000";
+
+    auto& cors = app.get_middleware<crow::CORSHandler>();
+    cors.global()
+        .allow_credentials()
+        .origin(origins);
 }
