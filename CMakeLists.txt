@@ -11,6 +11,7 @@ set(SRC_FILES
     file_format.hpp file_format.cpp
     libreoffice_service.hpp libreoffice_service.cpp
     logger.hpp
+    cors_middleware.hpp cors_middleware.cpp
 )
 
 list(TRANSFORM SRC_FILES PREPEND "src/")

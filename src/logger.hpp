@@ -16,15 +16,15 @@ private:
 public:
     inline void logInfo(std::string message)
     {
-        std::cout << fmt::format("[INFO]<{}> {}", getTimestamp(), message);
+        std::cout << fmt::format("[INFO]<{}> {}", getTimestamp(), message) << std::endl;
     }
     inline void logWarning(std::string message)
     {
-        std::cout << fmt::format("[WARNING]<{}> {}", getTimestamp(), message);
+        std::cout << fmt::format("[WARNING]<{}> {}", getTimestamp(), message) << std::endl;
     }
     inline void logError(std::string message)
     {
-        std::cout << fmt::format("[ERROR]<{}> {}", getTimestamp(), message);
+        std::cout << fmt::format("[ERROR]<{}> {}", getTimestamp(), message) << std::endl;
     }
 };
 

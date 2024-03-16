@@ -4,9 +4,9 @@
 #include "fmt/format.h"
 #include "utility.hpp"
 #include "prim_exception.hpp"
-#include "crow/middlewares/cors.h"
+#include "cors_middleware.hpp"
 
-using App = crow::App<crow::CORSHandler>;
+using App = crow::App<CorsMiddleware>;
 
 // fordec
 void setRouting(App& app);
@@ -30,6 +30,11 @@ int main(int argc, char* argv[])
 
 void setRouting(App& app)
 {
+    CROW_ROUTE(app, "/api/health")
+        .methods("GET"_method)
+    ([](const crow::request& req){
+        return crow::response(crow::OK);
+    });
     CROW_ROUTE(app, "/api/convert")
         .methods("POST"_method)
     ([](const crow::request& req){
@@ -65,12 +70,14 @@ void setRouting(App& app)
 
 void setCors(App& app)
 {
-    const static char* origin = "https://convert.peer-manager.com";
+    const static char* origins[] = { 
+        "https://convert.peer-manager.com",
+        "https://localhost:3000",
+    };
 
-    auto& cors = app.get_middleware<crow::CORSHandler>();
-    cors.global()
-        .allow_credentials()
-        .methods("POST"_method, "GET"_method)
-        .headers("authorization", "content-type")
-        .origin(origin);
+    auto& cors = app.get_middleware<CorsMiddleware>();
+    cors.allowHeaders({"content-type", "authorization"});
+    cors.allowMethods({"POST", "GET"});
+    cors.allowOrigins(origins, 2);
+    cors.allowCredentials();
 }
